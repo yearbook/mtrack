@@ -1,1 +1,1 @@
-web: mtrack
+web: ./mtrack
