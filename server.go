@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -100,6 +101,12 @@ func clickHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatalln("PORT env var not set")
+	}
+
 	safeHosts = []string{
 		"yearbook.com",
 		"www.yearbook.com",
@@ -115,5 +122,5 @@ func main() {
 	r.HandleFunc("/track/click/{account_id}/{domain}", clickHandler)
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
-	http.ListenAndServe(":8080", loggedRouter)
+	http.ListenAndServe(":"+port, loggedRouter)
 }
